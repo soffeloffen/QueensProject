@@ -19,6 +19,12 @@ public class SmartLogic implements IQueensLogic{
     }
 
     public void insertQueen(int column, int row) {
-        board[column][row] = 1;
-    }    
+        
+    }   
+    
+    /** Use n*n variables and make a method for retrieving the correct 
+     * variable or variable number for a given position (column and row).*/
+    public int retrieveVariable(){
+        return 1;
+    }
 }
