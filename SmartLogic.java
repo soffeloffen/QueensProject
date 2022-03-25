@@ -3,6 +3,8 @@ import net.sf.javabdd.JFactory;
 
 public class SmartLogic implements IQueensLogic{
 
+    /*TO RUN IN COMMAND PROMPT: java Queens.java SmartLogic 6 */ 
+
     /*
     
     CLASS DESCRIPTION
