@@ -1,3 +1,6 @@
+import net.sf.javabdd.BDDFactory;
+import net.sf.javabdd.JFactory;
+
 public class SmartLogic implements IQueensLogic{
 
     /*
@@ -26,5 +29,9 @@ public class SmartLogic implements IQueensLogic{
      * variable or variable number for a given position (column and row).*/
     public int retrieveVariable(){
         return 1;
+    }
+
+    public static void makeBDD(){
+        BDDFactory fact = JFactory.init(000, 200); //from BDDExamples.java
     }
 }
