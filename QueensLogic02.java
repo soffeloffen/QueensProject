@@ -5,6 +5,7 @@ import net.sf.javabdd.BDDFactory;
 import net.sf.javabdd.JFactory;
 
 public class QueensLogic02 implements IQueensLogic{
+
     private int[][] board;
 	private int size; 
 	
@@ -45,13 +46,11 @@ public class QueensLogic02 implements IQueensLogic{
                 removeQueen(row * size + column);
             } else {
                 board[column][row] = 1; 
-
                 setQueen(row * size + column);
             }
     
             boolean solved = restrictions.pathCount() == 1;
                                                           
-    
             for (int r = 0; r < size; r++) { 
                 for (int c = 0; c < size; c++) {
                     if (board[c][r] == 1)
@@ -106,11 +105,10 @@ public class QueensLogic02 implements IQueensLogic{
 		// get all the positions that is mutually exclusive with for position 'pos' due to the rows-, columns- and diagonal restrictions
 		private ArrayList<Integer> getRestrictions(int pos) {
 			ArrayList<Integer> attacking_positions = new ArrayList<Integer>();
-			int col = pos % size;
 
 			// get all the indices on the same column as variable posision 'pos'
 			for (int n = 0; n < size; n++) {
-				int p = col + n * size;
+				int p = pos % size + n * size;
 				if (p == pos)
 					continue;
 				attacking_positions.add(p);
@@ -129,7 +127,7 @@ public class QueensLogic02 implements IQueensLogic{
 
 			for (int[] vector : directions) {
 				int row = pos / size + vector[0];
-				col = pos % size + vector[1];
+				int col = pos % size + vector[1];
 				while (row >= 0 && row < size && col >= 0 && col < size) {
 					attacking_positions.add(row * size + col);
 					row += vector[0];
