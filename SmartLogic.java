@@ -24,6 +24,7 @@ public class SmartLogic implements IQueensLogic{
         this.size = size;
         this.board = new int[size][size];
         buildBDD();
+        updateInvalid();
     }
    
     public int[][] getBoard() {
@@ -31,7 +32,7 @@ public class SmartLogic implements IQueensLogic{
     }
 
     public void insertQueen(int column, int row) {
-        board[column][row] = 1;
+       queenInsert(column, row);
     }   
     
     public void buildBDD() {
@@ -49,6 +50,7 @@ public class SmartLogic implements IQueensLogic{
         this.bdd = True;
 
         //Add the rules to the bdd
+        createRules();
         createEightRule();
     }
 
@@ -65,6 +67,60 @@ public class SmartLogic implements IQueensLogic{
           this.bdd = this.bdd.and(sub_bdd);
         }
     }
+
+    private void createRules() {
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                createCellRule(x,y);
+            }
+        }
+      }
+
+      private void createCellRule(int x,int y) {
+        BDD sub_bdd = False;
+        BDD rest_false_bdd = True;
+        
+        //All other y's must be false
+        for (int yy = 0; yy < n; yy++) {
+          if (y != yy) {
+            rest_false_bdd = rest_false_bdd.and(this.factory.nithVar(place(x,yy)));
+          }
+        }
+  
+        //All other x's must be false
+        for (int xx = 0; xx < n; xx++) {
+          if (x != xx) {
+            rest_false_bdd = rest_false_bdd.and(this.factory.nithVar(place(xx,y)));
+          }
+        }
+  
+        //All other y+xx-x must be false
+        for (int xx = 0; xx < n; xx++) {
+          if (x != xx) {
+            if ((y+xx-x < 8) && (y+xx-x > 0)) {
+              rest_false_bdd = rest_false_bdd.and(this.factory.nithVar(place(xx,y+xx-x)));
+            }
+          }
+        }
+  
+        //All other y-xx+xx must be false
+        for (int xx = 0; xx < n; xx++) {
+          if (x != xx) {
+            if ((y-xx+x < 8) && (y-xx+x > 0)) {
+              rest_false_bdd = rest_false_bdd.and(this.factory.nithVar(place(xx,y-xx+x)));
+            }
+          }
+        }
+  
+        //Either the x,y is false
+        sub_bdd = sub_bdd.or(this.factory.nithVar(place(x,y)));
+        //Or (if the x,y is true) the rest is false
+        sub_bdd = sub_bdd.or(rest_false_bdd);
+  
+        //sub_bdd must be true
+        this.bdd = this.bdd.and(sub_bdd);
+      }
+  
 
     private int place(int column,int row) {
         return row*this.n+column;
